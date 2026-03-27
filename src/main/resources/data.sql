@@ -1,16 +1,19 @@
+-- ROOT tylko raz
 INSERT INTO category (name)
-VALUES ('Elektronika');
+SELECT 'Elektronika'
+WHERE NOT EXISTS (
+    SELECT 1 FROM category WHERE name = 'Elektronika'
+);
+
+-- CHILD
+INSERT INTO category (name, parent_id)
+SELECT 'Komputery', c.id
+FROM category c
+WHERE c.name = 'Elektronika'
+LIMIT 1;
 
 INSERT INTO category (name, parent_id)
-VALUES (
-           'Komputery',
-           (SELECT id FROM category WHERE name = 'Elektronika')
-       );
-INSERT INTO category(name, parent_id)
-VALUES (
-        'Stacjonarne',
-        (SELECT id from category WHERE name = 'Komputery')
-       )
-INSERT INTO category (name)
-VALUES ('Dom i Ogród');
-
+SELECT 'Telefony', c.id
+FROM category c
+WHERE c.name = 'Elektronika'
+LIMIT 1;
