@@ -1,4 +1,4 @@
-package com.stock_tracker.stock_tracker.exceptions;
+package com.stock_tracker.stock_tracker_ost.exceptions;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package com.stock_tracker.stock_tracker.model;
+package com.stock_tracker.stock_tracker_ost.model;
 
 public enum MovementType {
     IN,

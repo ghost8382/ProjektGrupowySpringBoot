@@ -1,4 +1,4 @@
-package com.stock_tracker.stock_tracker.model;
+package com.stock_tracker.stock_tracker_ost.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -10,9 +10,6 @@ public class StockMovement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Product product;
-
     private int quantity;
 
     @Enumerated(EnumType.STRING)
@@ -20,43 +17,18 @@ public class StockMovement {
 
     private LocalDateTime date;
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToOne
+    private Product product;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public int getQuantity() { return quantity; }
+    public MovementType getType() { return type; }
+    public LocalDateTime getDate() { return date; }
+    public Product getProduct() { return product; }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public MovementType getType() {
-        return type;
-    }
-
-    public void setType(MovementType type) {
-        this.type = type;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
+    public void setId(Long id) { this.id = id; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setType(MovementType type) { this.type = type; }
+    public void setDate(LocalDateTime date) { this.date = date; }
+    public void setProduct(Product product) { this.product = product; }
 }

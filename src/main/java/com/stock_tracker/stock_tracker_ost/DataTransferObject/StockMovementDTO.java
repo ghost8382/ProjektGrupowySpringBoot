@@ -1,7 +1,6 @@
-package com.stock_tracker.stock_tracker.DataTransferObject;
+package com.stock_tracker.stock_tracker_ost.DataTransferObject;
 
-import com.stock_tracker.stock_tracker.model.MovementType;
-
+import com.stock_tracker.stock_tracker_ost.model.MovementType;
 import java.time.LocalDateTime;
 
 public class StockMovementDTO {

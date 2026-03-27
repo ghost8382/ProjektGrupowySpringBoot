@@ -1,4 +1,4 @@
-package com.stock_tracker.stock_tracker.model;
+package com.stock_tracker.stock_tracker_ost.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
