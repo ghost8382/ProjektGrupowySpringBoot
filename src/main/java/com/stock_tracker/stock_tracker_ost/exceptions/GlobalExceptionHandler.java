@@ -14,6 +14,24 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(ex.getMessage(), 404);
     }
 
+    @ExceptionHandler(CategoryNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleCategoryNotFound(CategoryNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage(), 404);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleUserNotFound(UserNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage(), 404);
+    }
+
+    @ExceptionHandler(SaleNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleSaleNotFound(SaleNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage(), 404);
+    }
+
     @ExceptionHandler(NotEnoughStockException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleStock(NotEnoughStockException ex) {
@@ -23,6 +41,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidQuantityException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleQuantity(InvalidQuantityException ex) {
+        return new ErrorResponse(ex.getMessage(), 400);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleRuntime(RuntimeException ex) {
         return new ErrorResponse(ex.getMessage(), 400);
     }
 }
