@@ -44,6 +44,18 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(ex.getMessage(), 400);
     }
 
+    @ExceptionHandler(DuplicateCategoryNameException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleDuplicateCategory(DuplicateCategoryNameException ex) {
+        return new ErrorResponse(ex.getMessage(), 409);
+    }
+
+    @ExceptionHandler(ContractorNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleContractorNotFound(ContractorNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage(), 404);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleRuntime(RuntimeException ex) {

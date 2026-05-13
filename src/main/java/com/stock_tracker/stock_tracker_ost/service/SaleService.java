@@ -21,15 +21,18 @@ public class SaleService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final StockMovementRepository stockMovementRepository;
+    private final ContractorRepository contractorRepository;
 
     public SaleService(SaleRepository saleRepository,
                        UserRepository userRepository,
                        ProductRepository productRepository,
-                       StockMovementRepository stockMovementRepository) {
+                       StockMovementRepository stockMovementRepository,
+                       ContractorRepository contractorRepository) {
         this.saleRepository = saleRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.stockMovementRepository = stockMovementRepository;
+        this.contractorRepository = contractorRepository;
     }
 
     @Transactional
@@ -40,6 +43,12 @@ public class SaleService {
         Sale sale = new Sale();
         sale.setDate(LocalDateTime.now());
         sale.setUser(user);
+
+        if (request.getContractorId() != null) {
+            Contractor contractor = contractorRepository.findById(request.getContractorId())
+                    .orElseThrow(() -> new ContractorNotFoundException(request.getContractorId()));
+            sale.setContractor(contractor);
+        }
 
         List<SaleItem> items = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
@@ -107,11 +116,16 @@ public class SaleService {
                 ))
                 .toList();
 
+        Long contractorId = sale.getContractor() != null ? sale.getContractor().getId() : null;
+        String contractorName = sale.getContractor() != null ? sale.getContractor().getName() : null;
+
         return new SaleDTO(
                 sale.getId(),
                 sale.getDate(),
                 sale.getUser().getId(),
                 sale.getUser().getUsername(),
+                contractorId,
+                contractorName,
                 itemDTOs,
                 sale.getTotalAmount()
         );

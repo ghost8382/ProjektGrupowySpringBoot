@@ -2,6 +2,7 @@ package com.stock_tracker.stock_tracker_ost.service;
 
 import com.stock_tracker.stock_tracker_ost.DataTransferObject.CategoryDTO;
 import com.stock_tracker.stock_tracker_ost.exceptions.CategoryNotFoundException;
+import com.stock_tracker.stock_tracker_ost.exceptions.DuplicateCategoryNameException;
 import com.stock_tracker.stock_tracker_ost.model.Category;
 import com.stock_tracker.stock_tracker_ost.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,14 @@ public class CategoryService {
         if (parentId != null) {
             Category parent = categoryRepository.findById(parentId)
                     .orElseThrow(() -> new CategoryNotFoundException(parentId));
+            if (categoryRepository.existsByNameIgnoreCaseAndParent(name, parent)) {
+                throw new DuplicateCategoryNameException(name);
+            }
             category.setParent(parent);
+        } else {
+            if (categoryRepository.existsByNameIgnoreCaseAndParentIsNull(name)) {
+                throw new DuplicateCategoryNameException(name);
+            }
         }
 
         return categoryRepository.save(category);
@@ -61,8 +69,14 @@ public class CategoryService {
         if (parentId != null) {
             Category parent = categoryRepository.findById(parentId)
                     .orElseThrow(() -> new CategoryNotFoundException(parentId));
+            if (categoryRepository.existsByNameIgnoreCaseAndParentAndIdNot(name, parent, id)) {
+                throw new DuplicateCategoryNameException(name);
+            }
             category.setParent(parent);
         } else {
+            if (categoryRepository.existsByNameIgnoreCaseAndParentIsNullAndIdNot(name, id)) {
+                throw new DuplicateCategoryNameException(name);
+            }
             category.setParent(null);
         }
 
