@@ -46,6 +46,11 @@ public class SaleController {
         return saleService.getByUser(userId);
     }
 
+    @GetMapping("/contractor/{contractorId}")
+    public List<SaleDTO> getByContractor(@PathVariable Long contractorId) {
+        return saleService.getByContractor(contractorId);
+    }
+
     @GetMapping("/{id}/pdf/receipt")
     public ResponseEntity<byte[]> getReceipt(@PathVariable Long id) {
         byte[] pdf = pdfService.generateReceipt(id);

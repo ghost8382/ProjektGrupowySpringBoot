@@ -22,17 +22,20 @@ public class SaleService {
     private final ProductRepository productRepository;
     private final StockMovementRepository stockMovementRepository;
     private final ContractorRepository contractorRepository;
+    private final LoyaltyService loyaltyService;
 
     public SaleService(SaleRepository saleRepository,
                        UserRepository userRepository,
                        ProductRepository productRepository,
                        StockMovementRepository stockMovementRepository,
-                       ContractorRepository contractorRepository) {
+                       ContractorRepository contractorRepository,
+                       LoyaltyService loyaltyService) {
         this.saleRepository = saleRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.stockMovementRepository = stockMovementRepository;
         this.contractorRepository = contractorRepository;
+        this.loyaltyService = loyaltyService;
     }
 
     @Transactional
@@ -89,6 +92,10 @@ public class SaleService {
         sale.setTotalAmount(total);
         Sale saved = saleRepository.save(sale);
 
+        if (saved.getContractor() != null) {
+            loyaltyService.earnPoints(saved.getContractor(), total, saved);
+        }
+
         return toDTO(saved);
     }
 
@@ -104,6 +111,10 @@ public class SaleService {
 
     public List<SaleDTO> getByUser(Long userId) {
         return saleRepository.findByUserId(userId).stream().map(this::toDTO).toList();
+    }
+
+    public List<SaleDTO> getByContractor(Long contractorId) {
+        return saleRepository.findByContractorIdOrderByDateDesc(contractorId).stream().map(this::toDTO).toList();
     }
 
     private SaleDTO toDTO(Sale sale) {

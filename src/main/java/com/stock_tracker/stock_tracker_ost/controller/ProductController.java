@@ -5,7 +5,9 @@ import com.stock_tracker.stock_tracker_ost.DataTransferObject.StockMovementDTO;
 import com.stock_tracker.stock_tracker_ost.model.Product;
 import com.stock_tracker.stock_tracker_ost.service.ProductService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,9 +27,15 @@ public class ProductController {
     public Page<ProductDTO> getAll(
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String name,
+            @RequestParam(required = false, defaultValue = "name") String sortBy,
+            @RequestParam(required = false, defaultValue = "asc") String sortDir,
             Pageable pageable) {
 
-        return productService.getAll(categoryId, name, pageable);
+        Sort sort = sortDir.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        Pageable sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        return productService.getAll(categoryId, name, sorted);
     }
 
     @PostMapping
